@@ -23,20 +23,20 @@ func (n *naiveMatcher) Subscribe(topic string, sub Subscriber) (*Subscription, e
 	}
 	n.subs[topic][sub] = struct{}{}
 	n.mu.Unlock()
-	return &Subscription{topic: topic, subscriber: sub}, nil
+	return &Subscription{Topic: topic, Subscriber: sub}, nil
 }
 
 // Unsubscribe removes the Subscription.
 func (n *naiveMatcher) Unsubscribe(sub *Subscription) {
 	n.mu.Lock()
-	if subscribers, ok := n.subs[sub.topic]; ok {
+	if subscribers, ok := n.subs[sub.Topic]; ok {
 		for existing, _ := range subscribers {
-			if existing != sub.subscriber {
+			if existing != sub.Subscriber {
 				continue
 			}
 
 			// Delete the subscriber from the list.
-			delete(n.subs[sub.topic], sub.subscriber)
+			delete(n.subs[sub.Topic], sub.Subscriber)
 		}
 	}
 	n.mu.Unlock()

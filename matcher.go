@@ -11,9 +11,9 @@ type Subscriber interface{}
 
 // Subscription represents a topic subscription.
 type Subscription struct {
-	id         uint32
-	topic      string
-	subscriber Subscriber
+	ID         uint32
+	Topic      string
+	Subscriber Subscriber
 }
 
 // Matcher contains topic subscriptions and performs matches on them.

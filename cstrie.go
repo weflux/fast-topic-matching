@@ -168,7 +168,7 @@ func (c *csTrieMatcher) Subscribe(topic string, sub Subscriber) (*Subscription, 
 	if !c.iinsert(root, nil, words, sub) {
 		c.Subscribe(topic, sub)
 	}
-	return &Subscription{topic: topic, subscriber: sub}, nil
+	return &Subscription{Topic: topic, Subscriber: sub}, nil
 }
 
 func (c *csTrieMatcher) iinsert(i, parent *iNode, words []string, sub Subscriber) bool {
@@ -224,11 +224,11 @@ func (c *csTrieMatcher) iinsert(i, parent *iNode, words []string, sub Subscriber
 // Unsubscribe removes the Subscription.
 func (c *csTrieMatcher) Unsubscribe(sub *Subscription) {
 	var (
-		words   = strings.Split(sub.topic, delimiter)
+		words   = strings.Split(sub.Topic, delimiter)
 		rootPtr = (*unsafe.Pointer)(unsafe.Pointer(&c.root))
 		root    = (*iNode)(atomic.LoadPointer(rootPtr))
 	)
-	if !c.iremove(root, nil, nil, words, 0, sub.subscriber) {
+	if !c.iremove(root, nil, nil, words, 0, sub.Subscriber) {
 		c.Unsubscribe(sub)
 	}
 }

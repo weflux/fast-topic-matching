@@ -56,14 +56,14 @@ func (t *trieMatcher) Subscribe(topic string, sub Subscriber) (*Subscription, er
 	}
 	curr.subs[sub] = struct{}{}
 	t.mu.Unlock()
-	return &Subscription{topic: topic, subscriber: sub}, nil
+	return &Subscription{Topic: topic, Subscriber: sub}, nil
 }
 
 // Unsubscribe removes the Subscription.
 func (t *trieMatcher) Unsubscribe(sub *Subscription) {
 	t.mu.Lock()
 	curr := t.root
-	for _, word := range strings.Split(sub.topic, delimiter) {
+	for _, word := range strings.Split(sub.Topic, delimiter) {
 		child, ok := curr.children[word]
 		if !ok {
 			// Subscription doesn't exist.
@@ -72,7 +72,7 @@ func (t *trieMatcher) Unsubscribe(sub *Subscription) {
 		}
 		curr = child
 	}
-	delete(curr.subs, sub.subscriber)
+	delete(curr.subs, sub.Subscriber)
 	if len(curr.subs) == 0 && len(curr.children) == 0 {
 		curr.orphan()
 	}

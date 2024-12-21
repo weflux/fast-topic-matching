@@ -61,16 +61,16 @@ func (b *invertedBitmapMatcher) Subscribe(topic string, sub Subscriber) (*Subscr
 
 	b.subscribers[pos] = sub
 	b.mu.Unlock()
-	return &Subscription{id: pos, topic: topic, subscriber: sub}, nil
+	return &Subscription{ID: pos, Topic: topic, Subscriber: sub}, nil
 }
 
 func (b *invertedBitmapMatcher) Unsubscribe(sub *Subscription) {
 	b.mu.Lock()
 	for _, bm := range b.bitmaps {
-		bm.Remove(sub.id)
+		bm.Remove(sub.ID)
 	}
-	b.deletedPositions = append(b.deletedPositions, sub.id)
-	delete(b.subscribers, sub.id)
+	b.deletedPositions = append(b.deletedPositions, sub.ID)
+	delete(b.subscribers, sub.ID)
 	b.mu.Unlock()
 }
 
